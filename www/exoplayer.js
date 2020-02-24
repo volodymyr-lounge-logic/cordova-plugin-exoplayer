@@ -24,6 +24,7 @@
  */
 module.exports = {
     show: function (parameters, successCallback, errorCallback) {
+        console.log('showtime!!!');
         cordova.exec(successCallback, errorCallback, "ExoPlayer", "show", [parameters]);
     },
     setStream: function (url, controller, successCallback, errorCallback) {

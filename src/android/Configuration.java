@@ -38,6 +38,10 @@ public class Configuration {
         return Uri.parse(config.optString("url", ""));
     }
 
+    public final Uri getLAUri() {
+        return Uri.parse(config.optString("laUrl", ""));
+    }
+
     public final JSONObject getDimensions() {
         return config.optJSONObject("dimensions");
     }
