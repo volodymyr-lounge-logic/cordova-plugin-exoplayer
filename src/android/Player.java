@@ -300,7 +300,8 @@ public class Player {
                 break;
             case C.TYPE_HLS:
                 // Last param is AdaptiveMediaSourceEventListener
-                mediaSource = new HlsMediaSource(uri, dataSourceFactory, retryCount, mainHandler, null);
+                // mediaSource = new HlsMediaSource(uri, dataSourceFactory, retryCount, mainHandler, null);
+                mediaSource = new HlsMediaSource.Factory(dataSourceFactory).createMediaSource(uri);
                 break;
             case C.TYPE_SS:
                 DefaultSsChunkSource.Factory ssChunkSourceFactory = new DefaultSsChunkSource.Factory(dataSourceFactory);
