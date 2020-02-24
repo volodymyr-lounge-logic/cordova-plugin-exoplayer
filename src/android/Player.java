@@ -116,7 +116,7 @@ public class Player {
         public void onShuffleModeEnabledChanged(boolean shuffleModeEnabled) {
         }
 
-        @Override
+        // @Override
         public void onTimelineChanged(Timeline timeline, Object manifest) {
             JSONObject payload = Payload.timelineChangedEvent(Player.this.exoPlayer, timeline, manifest);
             new CallbackResponse(Player.this.callbackContext).send(PluginResult.Status.OK, payload, true);
