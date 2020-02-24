@@ -314,7 +314,7 @@ public class Player {
                 DrmSessionManager<ExoMediaCrypto> drmSessionManager = new DefaultDrmSessionManager.Builder()
                     .setUuidAndExoMediaDrmProvider("widevine", FrameworkMediaDrm.DEFAULT_PROVIDER)
                     .setMultiSession(false)
-                    .build(mediaDrmCallback);
+                    .build(drmCallback);
 
                 mediaSource = new DashMediaSource.Factory(DefaultDashChunkSource.Factory(dataSourceFactory), dataSourceFactory)
                     .setDrmSessionManager()
