@@ -41,6 +41,7 @@ import com.google.android.exoplayer2.trackselection.*;
 import com.google.android.exoplayer2.ui.*;
 import com.google.android.exoplayer2.upstream.*;
 import com.google.android.exoplayer2.util.*;
+import com.google.android.exoplayer2.util.Log;
 import com.squareup.picasso.*;
 import java.lang.*;
 import java.lang.Math;
