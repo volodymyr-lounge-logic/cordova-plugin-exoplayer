@@ -46,12 +46,11 @@ import com.google.android.exoplayer2.ExoPlayerLibraryInfo;
 import com.google.android.exoplayer2.upstream.HttpDataSource;
 import com.google.android.exoplayer2.upstream.HttpDataSource.Factory;
 import com.google.android.exoplayer2.drm.DefaultDrmSessionManager;
-import com.google.android.exoplayer2.drm.DefaultDrmSessionManager.Builder;
 import com.google.android.exoplayer2.drm.DrmSessionManager;
 import com.google.android.exoplayer2.drm.ExoMediaCrypto;
 import com.google.android.exoplayer2.drm.FrameworkMediaDrm;
-import com.google.android.exoplayer2.drm.FrameworkMediaDrm.DEFAULT_PROVIDER;
 import com.google.android.exoplayer2.drm.HttpMediaDrmCallback;
+import com.google.android.exoplayer2.util.Log;
 import com.squareup.picasso.*;
 import java.lang.*;
 import java.lang.Math;
@@ -126,7 +125,7 @@ public class Player {
         public void onShuffleModeEnabledChanged(boolean shuffleModeEnabled) {
         }
 
-        @Override
+        // @Override
         public void onTimelineChanged(Timeline timeline, Object manifest) {
             JSONObject payload = Payload.timelineChangedEvent(Player.this.exoPlayer, timeline, manifest);
             new CallbackResponse(Player.this.callbackContext).send(PluginResult.Status.OK, payload, true);
@@ -324,7 +323,8 @@ public class Player {
                 break;
             case C.TYPE_HLS:
                 // Last param is AdaptiveMediaSourceEventListener
-                mediaSource = new HlsMediaSource(uri, dataSourceFactory, retryCount, mainHandler, null);
+                // mediaSource = new HlsMediaSource(uri, dataSourceFactory, retryCount, mainHandler, null);
+                mediaSource = new HlsMediaSource.Factory(dataSourceFactory).createMediaSource(uri);
                 break;
             case C.TYPE_SS:
                 DefaultSsChunkSource.Factory ssChunkSourceFactory = new DefaultSsChunkSource.Factory(dataSourceFactory);
