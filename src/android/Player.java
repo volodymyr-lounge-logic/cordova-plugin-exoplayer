@@ -309,7 +309,7 @@ public class Player {
                 // mediaSource = new DashMediaSource(uri, dataSourceFactory, dashChunkSourceFactory, retryCount, livePresentationDelayMs, mainHandler, null);
 
                 HttpDataSource.Factory licenseDataSourceFactory = new DefaultHttpDataSourceFactory(userAgent);
-                HttpMediaDrmCallback drmCallback = new HttpMediaDrmCallback(laUri, licenseDataSourceFactory);
+                HttpMediaDrmCallback drmCallback = new HttpMediaDrmCallback(laUri.toString(), licenseDataSourceFactory);
 
                 DrmSessionManager<ExoMediaCrypto> drmSessionManager = new DefaultDrmSessionManager.Builder()
                     .setUuidAndExoMediaDrmProvider("widevine", FrameworkMediaDrm.DEFAULT_PROVIDER)
