@@ -253,8 +253,8 @@ public class Player {
     }
 
     private void preparePlayer() {
-        String uri = config.getUri();
-        String laUri = config.getLAUri();
+        Uri uri = config.getUri();
+        Uri laUri = config.getLAUri();
         int audioFocusResult = setupAudio();
         String audioFocusString = audioFocusResult == AudioManager.AUDIOFOCUS_REQUEST_FAILED ?
                 "AUDIOFOCUS_REQUEST_FAILED" :
@@ -308,7 +308,6 @@ public class Player {
                 // Last param is AdaptiveMediaSourceEventListener
                 // mediaSource = new DashMediaSource(uri, dataSourceFactory, dashChunkSourceFactory, retryCount, livePresentationDelayMs, mainHandler, null);
 
-                String userAgent = "CordovaPluginExoPlayer/2.5.5 (Linux;Android " + Build.VERSION.RELEASE + ") " + ExoPlayerLibraryInfo.VERSION_SLASHY;
                 HttpDataSource.Factory licenseDataSourceFactory = new DefaultHttpDataSourceFactory(userAgent);
                 HttpMediaDrmCallback drmCallback = new HttpMediaDrmCallback(laUri, licenseDataSourceFactory);
 
