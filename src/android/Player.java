@@ -28,6 +28,7 @@ import android.content.*;
 import android.media.*;
 import android.net.*;
 import android.os.*;
+import android.os.Build;
 import android.util.*;
 import android.view.*;
 import android.widget.*;
@@ -41,6 +42,14 @@ import com.google.android.exoplayer2.trackselection.*;
 import com.google.android.exoplayer2.ui.*;
 import com.google.android.exoplayer2.upstream.*;
 import com.google.android.exoplayer2.util.*;
+import com.google.android.exoplayer2.ExoPlayerLibraryInfo;
+import com.google.android.exoplayer2.upstream.HttpDataSource;
+import com.google.android.exoplayer2.upstream.HttpDataSource.Factory;
+import com.google.android.exoplayer2.drm.DefaultDrmSessionManager;
+import com.google.android.exoplayer2.drm.DrmSessionManager;
+import com.google.android.exoplayer2.drm.ExoMediaCrypto;
+import com.google.android.exoplayer2.drm.FrameworkMediaDrm;
+import com.google.android.exoplayer2.drm.HttpMediaDrmCallback;
 import com.squareup.picasso.*;
 import java.lang.*;
 import java.lang.Math;
@@ -205,7 +214,7 @@ public class Player {
         if (!config.isAudioOnly()) {
             createDialog();
         }
-        preparePlayer(config.getUri());
+        preparePlayer();
     }
 
     public void createDialog() {
@@ -243,7 +252,9 @@ public class Player {
         return audioManager.requestAudioFocus(audioFocusChangeListener, AudioManager.STREAM_MUSIC, AudioManager.AUDIOFOCUS_GAIN);
     }
 
-    private void preparePlayer(Uri uri) {
+    private void preparePlayer() {
+        String uri = config.getUri()
+        String laUri = config.getLAUri()
         int audioFocusResult = setupAudio();
         String audioFocusString = audioFocusResult == AudioManager.AUDIOFOCUS_REQUEST_FAILED ?
                 "AUDIOFOCUS_REQUEST_FAILED" :
@@ -259,7 +270,7 @@ public class Player {
             exoView.setPlayer(exoPlayer);
         }
 
-        MediaSource mediaSource = getMediaSource(uri, bandwidthMeter);
+        MediaSource mediaSource = getMediaSource(uri, bandwidthMeter, laUri);
         if (mediaSource != null) {
             long offset = config.getSeekTo();
             boolean autoPlay = config.autoPlay();
@@ -279,7 +290,7 @@ public class Player {
         }
     }
 
-    private MediaSource getMediaSource(Uri uri, DefaultBandwidthMeter bandwidthMeter) {
+    private MediaSource getMediaSource(Uri uri, DefaultBandwidthMeter bandwidthMeter, Uri laUri) {
         String userAgent = Util.getUserAgent(this.activity, config.getUserAgent());
         Handler mainHandler = new Handler();
         int connectTimeout = config.getConnectTimeout();
@@ -292,10 +303,23 @@ public class Player {
         int type = Util.inferContentType(uri);
         switch (type) {
             case C.TYPE_DASH:
-                long livePresentationDelayMs = DashMediaSource.DEFAULT_LIVE_PRESENTATION_DELAY_PREFER_MANIFEST_MS;
-                DefaultDashChunkSource.Factory dashChunkSourceFactory = new DefaultDashChunkSource.Factory(dataSourceFactory);
+                // long livePresentationDelayMs = DashMediaSource.DEFAULT_LIVE_PRESENTATION_DELAY_PREFER_MANIFEST_MS;
+                // DefaultDashChunkSource.Factory dashChunkSourceFactory = new DefaultDashChunkSource.Factory(dataSourceFactory);
                 // Last param is AdaptiveMediaSourceEventListener
-                mediaSource = new DashMediaSource(uri, dataSourceFactory, dashChunkSourceFactory, retryCount, livePresentationDelayMs, mainHandler, null);
+                // mediaSource = new DashMediaSource(uri, dataSourceFactory, dashChunkSourceFactory, retryCount, livePresentationDelayMs, mainHandler, null);
+
+                String userAgent = "CordovaPluginExoPlayer/2.5.5 (Linux;Android " + Build.VERSION.RELEASE + ") " + ExoPlayerLibraryInfo.VERSION_SLASHY;
+                HttpDataSource.Factory licenseDataSourceFactory = new DefaultHttpDataSourceFactory(userAgent);
+                HttpMediaDrmCallback drmCallback = new HttpMediaDrmCallback(laUri, licenseDataSourceFactory);
+
+                DrmSessionManager<ExoMediaCrypto> drmSessionManager = new DefaultDrmSessionManager.Builder()
+                    .setUuidAndExoMediaDrmProvider("widevine", FrameworkMediaDrm.DEFAULT_PROVIDER)
+                    .setMultiSession(false)
+                    .build(mediaDrmCallback);
+
+                mediaSource = new DashMediaSource.Factory(DefaultDashChunkSource.Factory(dataSourceFactory), dataSourceFactory)
+                    .setDrmSessionManager()
+                    .createMediaSource(uri);
                 break;
             case C.TYPE_HLS:
                 // Last param is AdaptiveMediaSourceEventListener
