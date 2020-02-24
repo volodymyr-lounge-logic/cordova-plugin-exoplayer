@@ -372,10 +372,10 @@ public class Player {
         }
     }
 
-    public void setStream(Uri uri, JSONObject controller) {
+    public void setStream(Uri uri, JSONObject controller, Uri laUri) {
         if (null != uri) {
             DefaultBandwidthMeter bandwidthMeter = new DefaultBandwidthMeter();
-            MediaSource mediaSource = getMediaSource(uri, bandwidthMeter);
+            MediaSource mediaSource = getMediaSource(uri, bandwidthMeter, laUri);
             exoPlayer.prepare(mediaSource);
             play();
         }

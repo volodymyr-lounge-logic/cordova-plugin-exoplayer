@@ -54,10 +54,11 @@ public class Plugin extends CordovaPlugin {
                     return false;
                 }
                 final String url = data.optString(0, null);
+                final String laUrl = data.optString(1, null);
                 final JSONObject controller = data.optJSONObject(1);
                 cordova.getActivity().runOnUiThread(new Runnable() {
                     public void run() {
-                        self.player.setStream(Uri.parse(url), controller);
+                        self.player.setStream(Uri.parse(url), controller, Uri.parse(laUrl));
                         new CallbackResponse(callbackContext).send(PluginResult.Status.NO_RESULT, true);
                     }
                 });
