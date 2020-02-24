@@ -253,8 +253,8 @@ public class Player {
     }
 
     private void preparePlayer() {
-        String uri = config.getUri()
-        String laUri = config.getLAUri()
+        String uri = config.getUri();
+        String laUri = config.getLAUri();
         int audioFocusResult = setupAudio();
         String audioFocusString = audioFocusResult == AudioManager.AUDIOFOCUS_REQUEST_FAILED ?
                 "AUDIOFOCUS_REQUEST_FAILED" :
