@@ -51,6 +51,7 @@ import com.google.android.exoplayer2.drm.ExoMediaCrypto;
 import com.google.android.exoplayer2.drm.FrameworkMediaDrm;
 import com.google.android.exoplayer2.drm.HttpMediaDrmCallback;
 import com.google.android.exoplayer2.util.Log;
+import com.google.android.exoplayer2.C;
 import com.squareup.picasso.*;
 import java.lang.*;
 import java.lang.Math;
@@ -313,7 +314,7 @@ public class Player {
                 HttpMediaDrmCallback drmCallback = new HttpMediaDrmCallback(laUri.toString(), licenseDataSourceFactory);
 
                 DrmSessionManager<ExoMediaCrypto> drmSessionManager = new DefaultDrmSessionManager.Builder()
-                    .setUuidAndExoMediaDrmProvider("widevine", FrameworkMediaDrm.DEFAULT_PROVIDER)
+                    .setUuidAndExoMediaDrmProvider(C.WIDEVINE_UUID, FrameworkMediaDrm.DEFAULT_PROVIDER)
                     .setMultiSession(false)
                     .build(drmCallback);
 
