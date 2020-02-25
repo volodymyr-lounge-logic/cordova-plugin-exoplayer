@@ -317,8 +317,8 @@ public class Player {
                     .setMultiSession(false)
                     .build(drmCallback);
 
-                mediaSource = new DashMediaSource.Factory(DefaultDashChunkSource.Factory(dataSourceFactory), dataSourceFactory)
-                    .setDrmSessionManager()
+                mediaSource = new DashMediaSource.Factory(dataSourceFactory)
+                    .setDrmSessionManager(drmSessionManager)
                     .createMediaSource(uri);
                 break;
             case C.TYPE_HLS:
